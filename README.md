@@ -58,3 +58,59 @@ check remote connections on
 	sudo nano /etc/postgresql/9.3/main/pg_hba.conf
 
 source: https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps
+
+change to postgres user and start
+
+	sudo su - postgres
+	psql
+
+create db,user and passwort catalog (in psql console)
+
+	CREATE DATABASE catalog;
+	CREATE USER catalog;
+	ALTER ROLE catalog WITH PASSWORD 'catalog';
+	postgres=# GRANT ALL PRIVILEGES ON DATABASE catalog TO catalog;
+	
+quit with 
+
+	\q
+	
+and exit to current user
+	
+	exit
+	
+
+# 8. install git 
+	
+	sudo apt-get install git
+	
+# 9. Deploy Catalog Project
+My Catalog project was never uploaded on git. Feel free to use that submission.
+
+Create folder stucture
+	
+	sudo mkdir /var/www/FlaskApp
+	sudo mkdir /var/www/FlaskApp/FlaskApp
+	
+Paste content of catalog Project into FlaskApp/FlaskApp
+rename catalog.py into __init__.py
+
+	sudo mv /var/www/FlaskApp/FlaskApp/catalog.py /var/wwww/FlaskApp/FlaskApp/__init__.py
+	
+Create wsgi file 
+	
+	sudo nano /var/www/FlaskApp/flaskapp.wsgi
+
+And paste content 
+
+	#!/usr/bin/python
+	import sys
+	import logging
+	logging.basicConfig(stream=sys.stderr)
+	sys.path.insert(0,"/var/www/FlaskApp/")
+
+	from FlaskApp import app as application
+	application.secret_key = 'super_secret_key'
+
+
+	
