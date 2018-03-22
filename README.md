@@ -113,10 +113,13 @@ Setup virtual environment
 	pip install psycopg2-binary
 	pip install --upgrade oauth2client
 
-#setup test data 
+setup test data 
+
 	sudo python /var/www/FlaskApp/FlaskApp/setup_database.py
 	sudo python /var/www/FlaskApp/FlaskApp/create_data.py
-	
+
+deactivate venv afterwards 
+
 	deactivate # leave virtualenvironment
 
 source : https://github.com/google/oauth2client
