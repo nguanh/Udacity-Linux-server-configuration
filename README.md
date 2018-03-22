@@ -87,15 +87,40 @@ and exit to current user
 # 9. Deploy Catalog Project
 My Catalog project was never uploaded on git. Feel free to use that submission.
 
-Create folder stucture
+## Create folder stucture
 	
 	sudo mkdir /var/www/FlaskApp
 	sudo mkdir /var/www/FlaskApp/FlaskApp
 	
+## configure python project
+
 Paste content of catalog Project into FlaskApp/FlaskApp
 rename catalog.py into __init__.py
 
 	sudo mv /var/www/FlaskApp/FlaskApp/catalog.py /var/wwww/FlaskApp/FlaskApp/__init__.py
+
+Install pip and virtualenvironment
+
+	sudo apt-get install python-pip
+	pip install virtualenv
+
+Setup virtual environment
+
+	sudo virtualenv /var/www/FlaskApp/FlaskApp/venv
+	source /var/www/FlaskApp/FlaskApp/venv/bin/activate
+	sudo chmod -R 777  /var/www/FlaskApp/FlaskApp/venv  # allow installation of pip packages
+	pip install flask sqlalchemy requests psycopg2
+	pip install psycopg2-binary
+	pip install --upgrade oauth2client
+
+#setup test data 
+	sudo python /var/www/FlaskApp/FlaskApp/setup_database.py
+	sudo python /var/www/FlaskApp/FlaskApp/create_data.py
+	
+	deactivate # leave virtualenvironment
+
+source : https://github.com/google/oauth2client
+
 	
 Create wsgi file 
 	
@@ -112,5 +137,40 @@ And paste content
 	from FlaskApp import app as application
 	application.secret_key = 'super_secret_key'
 
+#setup apache
+
+Create config file
+	
+	sudo nano /etc/apache2/sites-available/FlaskApp.conf
+	
+Insert
+	
+	<VirtualHost *:80>
+		ServerName 18.197.120.34
+		ServerAdmin adminguy
+		WSGIDaemonProcess FlaskApp python-path=/var/www/FlaskApp:/var/www/FlaskApp/FlaskApp/venv/lib/python2.7/site-packages
+		WSGIProcessGroup FlaskApp
+		WSGIScriptAlias / /var/www/FlaskApp/flaskapp.wsgi
+		<Directory /var/www/FlaskApp/FlaskApp/>
+			Order allow,deny
+			Allow from all
+		</Directory>
+		Alias /static /var/www/FlaskApp/FlaskApp/static
+		<Directory /var/www/FlaskApp/FlaskApp/static/>
+			Order allow,deny
+			Allow from all
+		</Directory>
+		ErrorLog ${APACHE_LOG_DIR}/error.log
+		LogLevel warn
+		CustomLog ${APACHE_LOG_DIR}/access.log combined
+	</VirtualHost>
+
+Enable Config
+	
+	sudo a2ensite FlaskApp
+
+Restart Apache2
+	
+	sudo service apache2 restart 
 
 	
