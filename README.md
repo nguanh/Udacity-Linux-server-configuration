@@ -85,6 +85,9 @@ and exit to current user
 	sudo apt-get install git
 	
 # 9. Deploy Catalog Project
+
+source: https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps
+
 My Catalog project was never uploaded on git. Feel free to use that submission.
 
 ## Create folder stucture
